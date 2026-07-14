@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PersonalBloggingPlatformAPI.Data;
+using PersonalBloggingPlatformAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,4 +20,12 @@ if (builder.Environment.IsDevelopment())
 }
 
 app.MapGet("/", () => "Hello World!");
+
+app.MapPost("/articles", async ([FromBody] Article article, AppDbContext db) =>
+{
+    db.Articles.Add(article);
+    await db.SaveChangesAsync();
+    return Results.Ok(article);
+});
+
 app.Run();
