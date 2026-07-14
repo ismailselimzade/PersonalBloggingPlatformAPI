@@ -51,8 +51,12 @@ namespace PersonalBloggingPlatformAPI
 
                 if (articles != null)
                 {
+                    IResult result = ValidateArticle(updateArticle);
+                    if (result != null) return result;
+
                     articles.Title = updateArticle.Title;
                     articles.Content = updateArticle.Content;
+                    articles.Author = updateArticle.Author;
                     await db.SaveChangesAsync();
 
                     return Results.Ok(articles);
