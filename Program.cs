@@ -40,4 +40,19 @@ app.MapGet("/articles/{id}", async (AppDbContext db, int id) =>
     return article == null ? Results.NotFound() : Results.Ok(article);
 });
 
+app.MapPut("articles/{id}", async ([FromBody] Article updateArticle, AppDbContext db, int id) =>
+{
+    var articles = await db.Articles.FindAsync(id);
+
+    if (articles != null)
+    {
+        articles.Title = updateArticle.Title;
+        articles.Content = updateArticle.Content;
+        await db.SaveChangesAsync();
+
+        return Results.Ok(articles);
+    }
+    return Results.NotFound();
+});
+
 app.Run();
