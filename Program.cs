@@ -34,4 +34,10 @@ app.MapGet("/articles", async (AppDbContext db) =>
     return Results.Ok(articles);
 });
 
+app.MapGet("/articles/{id}", async (AppDbContext db, int id) =>
+{
+    var article = await db.Articles.FindAsync(id);
+    return article == null ? Results.NotFound() : Results.Ok(article);
+});
+
 app.Run();
