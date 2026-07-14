@@ -55,4 +55,18 @@ app.MapPut("articles/{id}", async ([FromBody] Article updateArticle, AppDbContex
     return Results.NotFound();
 });
 
+app.MapDelete("/articles/{id}", async (AppDbContext db, int id) =>
+{
+    var articles = await db.Articles.FindAsync(id);
+
+    if (articles != null)
+    {
+        db.Remove(articles);
+        await db.SaveChangesAsync();
+        return Results.NoContent();
+    }
+
+    return Results.NotFound();
+});
+
 app.Run();
