@@ -8,15 +8,29 @@ namespace PersonalBloggingPlatformAPI
 {
     public class ArticleEndpoints
     {
+        private static IResult ValidateArticle(Article article) 
+        {
+            if (string.IsNullOrWhiteSpace(article.Title))
+                return Results.BadRequest("Error Message Title");
+            if (string.IsNullOrWhiteSpace(article.Content))
+                return Results.BadRequest("Error Message Content");
+            if (string.IsNullOrWhiteSpace(article.Author))
+                return Results.BadRequest("Error Message Author");
+
+            return null;
+        }
         public static RouteGroupBuilder routeGroupBuilder(WebApplication app)
         {
             var group = app.MapGroup("/articles");
 
             group.MapPost("", async ([FromBody] Article article, AppDbContext db) =>
             {
+                IResult result = ValidateArticle(article);
+                if (result != null) return result;
+
                 db.Articles.Add(article);
                 await db.SaveChangesAsync();
-                return Results.Ok(article);
+                return Results.Created($"/articles/{article.Id}", article);
             });
 
             group.MapGet("", async (AppDbContext db) =>
