@@ -28,4 +28,10 @@ app.MapPost("/articles", async ([FromBody] Article article, AppDbContext db) =>
     return Results.Ok(article);
 });
 
+app.MapGet("/articles", async (AppDbContext db) =>
+{
+    var articles = await db.Articles.ToListAsync();
+    return Results.Ok(articles);
+});
+
 app.Run();
