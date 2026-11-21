@@ -1,3 +1,3 @@
 <Solution>
-  <Project Path="PersonalBloggingPlatformAPI.csproj" />
+  <Project Path="PersonalBloggingPlatformAPI\PersonalBloggingPlatformAPI.csproj" />
 </Solution>
